@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Production-quality Multi-Tenant HR Management System with MySQL Engine & 3D Editorial UI",
   "private": true,
+  "main": "api/index.js",
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "npm --prefix server run dev",
@@ -12,6 +13,21 @@
     "seed": "npm --prefix server run seed",
     "install:all": "npm install && npm --prefix server install && npm --prefix client install",
     "postinstall": "npm --prefix server install && npm --prefix client install"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.3.1",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.5.1",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.23.4",
+    "nodemailer": "^9.0.5",
+    "uuid": "^14.0.2",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
