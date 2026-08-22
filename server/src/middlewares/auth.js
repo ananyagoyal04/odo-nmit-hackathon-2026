@@ -1,0 +1,49 @@
+const jwt = require('jsonwebtoken');
+const db = require('../db/queries');
+const ApiError = require('../utils/apiError');
+const asyncHandler = require('../utils/asyncHandler');
+const { JWT_SECRET } = require('../config/env');
+
+const authenticate = asyncHandler(async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    throw ApiError.unauthorized('Authentication required. Missing or malformed token.');
+  }
+
+  const token = authHeader.split(' ')[1];
+  if (!token) {
+    throw ApiError.unauthorized('Authentication required. Bearer token is empty.');
+  }
+
+  let decoded;
+  try {
+    decoded = jwt.verify(token, JWT_SECRET);
+  } catch (err) {
+    if (err.name === 'TokenExpiredError') {
+      throw ApiError.unauthorized('Session expired. Please log in again.');
+    }
+    throw ApiError.unauthorized('Invalid authentication token.');
+  }
+
+  const userId = decoded.sub || decoded.id;
+  if (!userId) {
+    throw ApiError.unauthorized('Invalid token payload.');
+  }
+
+  const user = await db.findUserById(userId);
+  if (!user) {
+    throw ApiError.unauthorized('User not found.');
+  }
+
+  if (!user.isActive) {
+    throw ApiError.unauthorized('Your account has been deactivated. Please contact your administrator.');
+  }
+
+  req.user = user;
+  req.companyId = user.companyId;
+  next();
+});
+
+module.exports = {
+  authenticate
+};
