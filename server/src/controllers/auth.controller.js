@@ -7,8 +7,11 @@ const { deriveCompanyCode } = require('../utils/loginIdGenerator');
 const { JWT_SECRET, JWT_EXPIRES_IN } = require('../config/env');
 const { isValidRealEmail, sendLoginAlertEmail } = require('../services/emailService');
 
-const signToken = (userId) => {
-  return jwt.sign({ sub: userId }, JWT_SECRET, {
+const signToken = (user) => {
+  const userId = typeof user === 'object' ? user._id || user.id : user;
+  const email = typeof user === 'object' ? user.email : '';
+  const role = typeof user === 'object' ? user.role : '';
+  return jwt.sign({ sub: userId, id: userId, email, role }, JWT_SECRET, {
     expiresIn: JWT_EXPIRES_IN
   });
 };
@@ -79,7 +82,7 @@ const registerCompany = asyncHandler(async (req, res) => {
     ip: req.ip || req.socket?.remoteAddress || '127.0.0.1'
   });
 
-  const token = signToken(adminUser._id);
+  const token = signToken(adminUser);
 
   // Dispatch welcome email
   sendLoginAlertEmail({
@@ -161,7 +164,7 @@ const login = asyncHandler(async (req, res) => {
     }).catch((e) => console.warn('Email dispatch notice:', e.message));
   }
 
-  const token = signToken(user._id);
+  const token = signToken(user);
 
   res.status(200).json({
     success: true,

@@ -26,13 +26,16 @@ const authenticate = asyncHandler(async (req, res, next) => {
   }
 
   const userId = decoded.sub || decoded.id;
-  if (!userId) {
-    throw ApiError.unauthorized('Invalid token payload.');
+  let user = null;
+  if (userId) {
+    user = await db.findUserById(userId);
+  }
+  if (!user && (decoded.email || decoded.loginId)) {
+    user = await db.findUserByLoginOrEmail(decoded.email || decoded.loginId);
   }
 
-  const user = await db.findUserById(userId);
   if (!user) {
-    throw ApiError.unauthorized('User not found.');
+    throw ApiError.unauthorized('User session not found.');
   }
 
   if (!user.isActive) {

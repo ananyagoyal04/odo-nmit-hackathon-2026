@@ -298,11 +298,11 @@ async function autoSeedMySQL() {
 
     console.log('🌱 [MySQL] Empty database detected. Auto-seeding Odoo India workforce...');
 
-    const companyId = uuidv4();
-    const deptEngId = uuidv4();
-    const deptDesignId = uuidv4();
-    const deptHRId = uuidv4();
-    const deptSalesId = uuidv4();
+    const companyId = 'e0c8a9ec-ef42-4b17-b984-d7479b2d6122';
+    const deptEngId = 'd1111111-1111-4111-8111-111111111111';
+    const deptDesignId = 'd2222222-2222-4222-8222-222222222222';
+    const deptHRId = 'd3333333-3333-4333-8333-333333333333';
+    const deptSalesId = 'd4444444-4444-4444-8444-444444444444';
 
     // 1. Company
     await query(
@@ -329,7 +329,7 @@ async function autoSeedMySQL() {
     const adminPasswordHash = await bcrypt.hash('nutan@1979', 10);
 
     // 3. Super Admin
-    const adminId = uuidv4();
+    const adminId = 'u1111111-1111-4111-8111-111111111111';
     await query(
       `INSERT INTO users (
         id, company_id, login_id, first_name, last_name, email, password_hash, phone, role,
@@ -354,7 +354,7 @@ async function autoSeedMySQL() {
     );
 
     // 4. HR Manager
-    const hrId = uuidv4();
+    const hrId = 'u2222222-2222-4222-8222-222222222222';
     await query(
       `INSERT INTO users (
         id, company_id, login_id, first_name, last_name, email, password_hash, phone, role,
@@ -379,7 +379,7 @@ async function autoSeedMySQL() {
     );
 
     // 5. Senior Engineer: Shruthika Dutta
-    const emp1Id = uuidv4();
+    const emp1Id = 'u3333333-3333-4333-8333-333333333333';
     await query(
       `INSERT INTO users (
         id, company_id, login_id, first_name, last_name, email, password_hash, phone, role,
@@ -404,7 +404,7 @@ async function autoSeedMySQL() {
     );
 
     // 6. Lead Designer: Aarav Mehta
-    const emp2Id = uuidv4();
+    const emp2Id = 'u4444444-4444-4444-8444-444444444444';
     await query(
       `INSERT INTO users (
         id, company_id, login_id, first_name, last_name, email, password_hash, phone, role,
