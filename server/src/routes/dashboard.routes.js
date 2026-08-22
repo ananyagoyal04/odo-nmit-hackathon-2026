@@ -7,5 +7,6 @@ const router = express.Router();
 router.use(authenticate);
 
 router.get('/stats', getDashboardStats);
+router.get('/', getDashboardStats);
 
 module.exports = router;
