@@ -231,15 +231,25 @@ async function initSchema() {
  * Connect to MySQL Database
  */
 async function connectDB() {
+  // Instant serverless engine for Vercel when no external remote database is configured
+  if (process.env.VERCEL && (!process.env.MYSQL_HOST || process.env.MYSQL_HOST === '127.0.0.1' || process.env.MYSQL_HOST === 'localhost')) {
+    isInMemoryFallback = true;
+    initInMemoryTables();
+    await autoSeedMySQL();
+    console.log('✅ [MySQL] Pure SQL in-memory engine ready for Vercel deployment.');
+    return null;
+  }
+
   try {
     console.log(`[MySQL] Attempting connection to MySQL server at ${MYSQL_HOST}:${MYSQL_PORT}...`);
 
-    // Step 1: Connect to server and ensure database exists
+    // Step 1: Connect to server and ensure database exists (with fast timeout)
     const rootConn = await mysql.createConnection({
       host: MYSQL_HOST,
       port: MYSQL_PORT,
       user: MYSQL_USER,
-      password: MYSQL_PASSWORD
+      password: MYSQL_PASSWORD,
+      connectTimeout: 1000
     });
 
     await rootConn.query(`CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
@@ -254,7 +264,8 @@ async function connectDB() {
       database: MYSQL_DATABASE,
       waitForConnections: true,
       connectionLimit: 20,
-      queueLimit: 0
+      queueLimit: 0,
+      connectTimeout: 2000
     });
 
     const [test] = await pool.query('SELECT 1 as connected');

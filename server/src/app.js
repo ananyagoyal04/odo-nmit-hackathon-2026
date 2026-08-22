@@ -33,6 +33,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Base API Routes
 app.use('/api', routes);
+app.use('/', routes);
 
 // Handle 404 for unmatched routes
 app.use((req, res, next) => {
