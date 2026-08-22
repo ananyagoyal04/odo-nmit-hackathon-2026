@@ -108,4 +108,4 @@ The **Odoo Workforce HR Management System is deployed on Vercel** and is availab
 **Backend:** Node.js + Express
 **Database:** Native MySQL
 
-🌐 **Live Deployment:** *Deployed on Vercel*
+🌐 **Live Deployment:** (https://odo-nmit-hackathon-2026-zeta.vercel.app/login)
