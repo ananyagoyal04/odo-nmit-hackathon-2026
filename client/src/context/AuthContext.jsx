@@ -135,6 +135,14 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const switchPersona = async (loginId, password = 'Password@123') => {
+    return await login({
+      companyCode: company?.companyCode || 'OI',
+      identifier: loginId,
+      password
+    });
+  };
+
   const value = {
     token,
     user,
@@ -146,6 +154,7 @@ export function AuthProvider({ children }) {
     login,
     register,
     logout,
+    switchPersona,
     refreshMe,
     handleCheckIn,
     handleCheckOut,

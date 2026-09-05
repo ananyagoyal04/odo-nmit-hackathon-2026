@@ -445,7 +445,7 @@ module.exports = {
   // -------------------------------------------------------------
   async getDepartments(companyId) {
     const sql = `
-      SELECT d.*, u.first_name, u.last_name,
+      SELECT d.*, u.first_name, u.last_name, u.email as manager_email, u.designation as manager_designation, u.avatar_color as manager_avatar_color, u.avatar_url as manager_avatar_url,
         (SELECT COUNT(*) FROM users WHERE department_id = d.id) as employee_count
       FROM departments d
       LEFT JOIN users u ON d.manager_id = u.id
@@ -458,7 +458,15 @@ module.exports = {
       id: r.id,
       name: r.name,
       description: r.description || '',
-      manager: r.manager_id ? { _id: r.manager_id, fullName: `${r.first_name} ${r.last_name || ''}`.trim() } : null,
+      manager: r.manager_id ? {
+        _id: r.manager_id,
+        id: r.manager_id,
+        fullName: `${r.first_name} ${r.last_name || ''}`.trim(),
+        email: r.manager_email,
+        designation: r.manager_designation,
+        avatarColor: r.manager_avatar_color,
+        avatarUrl: r.manager_avatar_url
+      } : null,
       employeeCount: Number(r.employee_count) || 0,
       createdAt: r.created_at
     }));

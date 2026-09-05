@@ -17,7 +17,12 @@ import {
   DollarSign,
   Bell,
   CreditCard,
-  Target
+  Target,
+  Sparkles,
+  Shield,
+  Award,
+  Code2,
+  Palette
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
@@ -31,7 +36,7 @@ import ThemeSwitcher from './ThemeSwitcher';
 import authApi from '../services/authApi';
 
 export default function Layout() {
-  const { user, company, todayAttendance, handleCheckIn, handleCheckOut, logout } = useAuth();
+  const { user, company, todayAttendance, handleCheckIn, handleCheckOut, logout, switchPersona } = useAuth();
   const { success, error } = useToast();
   const navigate = useNavigate();
 
@@ -43,6 +48,25 @@ export default function Layout() {
   const [confirmNewPw, setConfirmNewPw] = useState('');
   const [pwBusy, setPwBusy] = useState(false);
   const [actionBusy, setActionBusy] = useState(false);
+  const [switchingPersona, setSwitchingPersona] = useState(false);
+
+  const handleSwitchPersona = async (loginId, personaName) => {
+    try {
+      setSwitchingPersona(true);
+      setDropdownOpen(false);
+      try {
+        await switchPersona(loginId, 'Password@123');
+      } catch {
+        // Fallback for primary admin
+        await switchPersona(loginId, 'nutan@1979');
+      }
+      success(`Switched role to ${personaName} (${loginId})`);
+    } catch (err) {
+      error(err?.message || 'Failed to switch demo persona');
+    } finally {
+      setSwitchingPersona(false);
+    }
+  };
 
   // Live timer for elapsed work time if checked in today
   const [elapsed, setElapsed] = useState('');
@@ -305,6 +329,58 @@ export default function Layout() {
                   >
                     <KeyRound size={16} /> Change Password
                   </button>
+
+                  <div style={{ height: 1, backgroundColor: 'var(--border-color)', margin: '0.35rem 0' }} />
+
+                  {/* Portfolio Demo Quick Switcher */}
+                  <div style={{ padding: '0.45rem 0.85rem 0.25rem', fontSize: '0.7rem', color: 'var(--copper)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                    <Sparkles size={12} /> Switch Demo Persona
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', padding: '0 0.35rem' }}>
+                    {[
+                      { id: 'OI-ADM-001', name: 'Rajesh Sharma', role: 'Super Admin', icon: Shield, badge: 'Full Access' },
+                      { id: 'OI-HR-001', name: 'Priya Patel', role: 'Head of HR', icon: Award, badge: 'HR Admin' },
+                      { id: 'OI-ENG-001', name: 'Shruthika Dutta', role: 'Staff Architect', icon: Code2, badge: 'Eng Lead' },
+                      { id: 'OI-DES-001', name: 'Aarav Mehta', role: 'Principal Designer', icon: Palette, badge: 'Design Lead' }
+                    ].map((p) => {
+                      const isActive = user?.loginId === p.id;
+                      const IconComp = p.icon;
+                      return (
+                        <button
+                          key={p.id}
+                          className="dropdown-item"
+                          style={{
+                            fontSize: '0.8rem',
+                            padding: '0.45rem 0.65rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            borderRadius: 'var(--radius-sm)',
+                            backgroundColor: isActive ? 'rgba(217, 119, 6, 0.12)' : 'transparent',
+                            color: isActive ? 'var(--copper)' : 'var(--text-main)',
+                            fontWeight: isActive ? 700 : 500
+                          }}
+                          disabled={switchingPersona}
+                          onClick={() => handleSwitchPersona(p.id, p.name)}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <IconComp size={14} color={isActive ? 'var(--copper)' : 'var(--text-dim)'} />
+                            <div style={{ textAlign: 'left' }}>
+                              <div>{p.name}</div>
+                              <div style={{ fontSize: '0.68rem', color: 'var(--text-dim)' }}>{p.role}</div>
+                            </div>
+                          </div>
+                          <span
+                            className={`badge ${isActive ? 'badge-copper' : 'badge-neutral'}`}
+                            style={{ fontSize: '0.62rem', padding: '2px 5px' }}
+                          >
+                            {p.badge}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
 
                   <div style={{ height: 1, backgroundColor: 'var(--border-color)', margin: '0.35rem 0' }} />
 

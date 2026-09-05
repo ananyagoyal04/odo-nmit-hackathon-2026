@@ -1032,6 +1032,98 @@ async function autoSeedMySQL() {
       );
     }
 
+    // Authentic Enterprise Security Audit Logs
+    const auditLogsList = [
+      {
+        actorId: 'u1111111-1111-4111-8111-111111111111',
+        action: 'SUPER_ADMIN_AUTH',
+        targetType: 'AuthSession',
+        targetId: 'u1111111-1111-4111-8111-111111111111',
+        metadata: { clearance: 'LEVEL_5_ROOT', mfa: 'HARDWARE_TOKEN_VERIFIED', location: 'Bengaluru HQ' },
+        ip: '10.0.4.12'
+      },
+      {
+        actorId: 'uaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+        action: 'STATUTORY_PAYROLL_RUN',
+        targetType: 'PayrollBatch',
+        targetId: 'PB-2026-09',
+        metadata: { month: 'September 2026', totalDisbursed: 2840000, epfContribution: 170400, taxDeducted: 426000 },
+        ip: '172.16.20.14'
+      },
+      {
+        actorId: 'u2222222-2222-4222-8222-222222222222',
+        action: 'TIMEOFF_APPROVE',
+        targetType: 'TimeOff',
+        targetId: 'u3333333-3333-4333-8333-333333333333',
+        metadata: { employee: 'Shruthika Dutta', leaveType: 'Paid Time Off', days: 3, approvedBalance: 21 },
+        ip: '192.168.1.104'
+      },
+      {
+        actorId: 'u1111111-1111-4111-8111-111111111111',
+        action: 'SALARY_UPDATE',
+        targetType: 'Compensation',
+        targetId: 'u3333333-3333-4333-8333-333333333333',
+        metadata: { employee: 'Shruthika Dutta', oldWage: 240000, newWage: 280000, appraisalQuarter: 'Q3 2026', designation: 'Staff Software Architect' },
+        ip: '10.0.4.12'
+      },
+      {
+        actorId: 'u2222222-2222-4222-8222-222222222222',
+        action: 'EXPENSE_APPROVED',
+        targetType: 'ExpenseClaim',
+        targetId: 'EXP-8891',
+        metadata: { employee: 'Shruthika Dutta', category: 'Training & Certifications', amount: 24500, title: 'AWS Certified Solutions Architect Professional' },
+        ip: '192.168.1.104'
+      },
+      {
+        actorId: 'u1111111-1111-4111-8111-111111111111',
+        action: 'DEPARTMENT_CREATE',
+        targetType: 'Department',
+        targetId: deptAIId,
+        metadata: { departmentName: 'AI & Data Intelligence', lead: 'Ananya Deshmukh', budgetAllocationLakhs: 45 },
+        ip: '10.0.4.12'
+      },
+      {
+        actorId: 'u9999999-9999-4999-8999-999999999999',
+        action: 'SECURITY_AUDIT_CHECK',
+        targetType: 'ISO_27001_COMPLIANCE',
+        targetId: 'SOC2-TYPE-II',
+        metadata: { scanEngine: 'OWASP_ZAP_AUTOMATED', vulnerabilitiesFound: 0, tlsStatus: 'TLS_1_3_ENFORCED', posture: 'COMPLIANT' },
+        ip: '10.2.14.88'
+      },
+      {
+        actorId: 'u2222222-2222-4222-8222-222222222222',
+        action: 'EMPLOYEE_CREATE',
+        targetType: 'User',
+        targetId: 'uccccccc-cccc-4ccc-8ccc-cccccccccccc',
+        metadata: { employeeCode: 'EMP-1012', loginId: 'OI250012', name: 'Tanmay Joshi', department: 'Core Engineering & Platform' },
+        ip: '192.168.1.104'
+      },
+      {
+        actorId: 'u1111111-1111-4111-8111-111111111111',
+        action: 'ROLE_MODIFIED',
+        targetType: 'RBAC_Policy',
+        targetId: 'u2222222-2222-4222-8222-222222222222',
+        metadata: { user: 'Priya Patel', grantedRoles: ['HR_ADMIN', 'PAYROLL_APPROVER'], approvedBy: 'Rajesh Sharma' },
+        ip: '10.0.4.12'
+      },
+      {
+        actorId: 'u2222222-2222-4222-8222-222222222222',
+        action: 'POLICY_BROADCAST',
+        targetType: 'Announcement',
+        targetId: 'ANN-2026-Q3',
+        metadata: { title: 'Annual Corporate Health Checkup & Family GMC Insurance', priority: 'HIGH', broadcastAudience: 'ALL_EMPLOYEES' },
+        ip: '192.168.1.104'
+      }
+    ];
+
+    for (const log of auditLogsList) {
+      await query(
+        `INSERT INTO audit_logs (id, company_id, actor_id, action, target_type, target_id, metadata, ip)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [uuidv4(), companyId, log.actorId, log.action, log.targetType, log.targetId, JSON.stringify(log.metadata), log.ip]
+      );
+    }
+
     // Counter sequence
     await query(`INSERT INTO counters (id, seq) VALUES (?, 12)`, [`OI_${new Date().getFullYear().toString().slice(-2)}`]);
 
