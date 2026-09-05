@@ -247,15 +247,15 @@ export default function Attendance() {
 
           <div>
             {!isCheckedIn ? (
-              <button className="btn btn-primary btn-lg" onClick={onCheckIn} disabled={actionBusy}>
+              <button className="btn btn-primary btn-lg" onClick={onCheckIn} disabled={actionBusy} data-testid="clock-in-btn">
                 {actionBusy ? <span className="spinner" /> : <><CheckCircle2 size={18} /> Check In Now</>}
               </button>
             ) : !isCheckedOut ? (
-              <button className="btn btn-danger btn-lg" onClick={onCheckOut} disabled={actionBusy}>
+              <button className="btn btn-danger btn-lg" onClick={onCheckOut} disabled={actionBusy} data-testid="clock-out-btn">
                 {actionBusy ? <span className="spinner" /> : <><Clock size={18} /> Clock Out for the Day</>}
               </button>
             ) : (
-              <div className="badge badge-success" style={{ padding: '0.6rem 1.2rem', fontSize: '0.9rem' }}>
+              <div className="badge badge-success" style={{ padding: '0.6rem 1.2rem', fontSize: '0.9rem' }} data-testid="attendance-completed-badge">
                 ✓ Today&apos;s Shift Completed ({todayAttendance.totalWorkHours} hrs logged)
               </div>
             )}

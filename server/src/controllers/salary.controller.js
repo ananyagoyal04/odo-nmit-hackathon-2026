@@ -25,7 +25,14 @@ const getSalaryStructure = asyncHandler(async (req, res) => {
     success: true,
     employeeId: employee._id,
     monthlyWage,
-    breakdown
+    breakdown,
+    ...breakdown,
+    data: {
+      employeeId: employee._id,
+      monthlyWage,
+      breakdown,
+      ...breakdown
+    }
   });
 });
 

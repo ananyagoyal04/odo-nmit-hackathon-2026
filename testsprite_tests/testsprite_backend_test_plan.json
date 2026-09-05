@@ -1,0 +1,52 @@
+[
+  {
+    "id": "TC001",
+    "title": "get apihealth returns servicestatus",
+    "description": "Verify that GET /api/health returns HTTP 200 with correct service status and uptime details when the service is running."
+  },
+  {
+    "id": "TC002",
+    "title": "post apiauthregister creates new tenant and superadmin",
+    "description": "Verify that POST /api/auth/register with valid company and admin details creates a new tenant and root super admin, returning HTTP 201."
+  },
+  {
+    "id": "TC003",
+    "title": "post apiauthlogin authenticates user and returns jwt",
+    "description": "Verify that POST /api/auth/login with valid identifier and password returns HTTP 200 with a JWT token."
+  },
+  {
+    "id": "TC004",
+    "title": "get apiauthme returns authenticated user profile",
+    "description": "Verify that GET /api/auth/me with valid bearer token returns HTTP 200 with user profile and company metadata."
+  },
+  {
+    "id": "TC005",
+    "title": "get apiemployees lists employees for tenant",
+    "description": "Verify that GET /api/employees with valid JWT returns HTTP 200 with the list of employees for the authenticated tenant."
+  },
+  {
+    "id": "TC006",
+    "title": "post apiemployees creates new employee record",
+    "description": "Verify that POST /api/employees with required fields creates a new employee and returns HTTP 201 with the employee record."
+  },
+  {
+    "id": "TC007",
+    "title": "get apiemployeesid returns deep employee profile dossier",
+    "description": "Verify that GET /api/employees/:id with valid employee ID and JWT returns HTTP 200 with detailed employee profile dossier."
+  },
+  {
+    "id": "TC008",
+    "title": "get apiemployeesidsalary returns statutory salary breakdown",
+    "description": "Verify that GET /api/employees/:id/salary with authorized role returns HTTP 200 with statutory CTC salary breakdown for the employee."
+  },
+  {
+    "id": "TC009",
+    "title": "post apiattendancecheckin records checkin timestamp",
+    "description": "Verify that POST /api/attendance/check-in with valid JWT records the check-in timestamp and returns HTTP 200."
+  },
+  {
+    "id": "TC010",
+    "title": "post apiattendancecheckout records checkout and computes workhours",
+    "description": "Verify that POST /api/attendance/check-out with valid JWT records the check-out timestamp, computes total work hours, and returns HTTP 200."
+  }
+]

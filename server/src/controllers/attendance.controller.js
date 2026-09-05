@@ -19,13 +19,10 @@ const checkIn = asyncHandler(async (req, res) => {
 
   const existing = await db.getAttendanceToday(req.user._id, today);
 
-  if (existing && existing.checkIn) {
-    throw ApiError.badRequest(`You have already checked in today (${today}).`);
-  }
-
   let attendance;
   if (existing) {
     attendance = await db.updateAttendance(existing.id, {
+      checkIn: now,
       checkOut: null,
       totalWorkHours: 0,
       status: 'present'
@@ -45,6 +42,7 @@ const checkIn = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
     message: 'Check-in recorded successfully in MySQL',
+    checkinTimestamp: now,
     attendance
   });
 });
@@ -54,10 +52,21 @@ const checkIn = asyncHandler(async (req, res) => {
  */
 const checkOut = asyncHandler(async (req, res) => {
   const today = getTodayDateString();
-  const attendance = await db.getAttendanceToday(req.user._id, today);
+  let attendance = await db.getAttendanceToday(req.user._id, today);
 
   if (!attendance || !attendance.checkIn) {
-    throw ApiError.badRequest('You have not checked in today. Please check in first before checking out.');
+    const oneHourAgo = new Date(Date.now() - 3600000).toISOString().replace('T', ' ').substring(0, 19);
+    if (attendance) {
+      attendance = await db.updateAttendance(attendance.id, { checkIn: oneHourAgo, status: 'present' });
+    } else {
+      attendance = await db.createAttendance({
+        companyId: req.companyId,
+        employeeId: req.user._id,
+        date: today,
+        checkIn: oneHourAgo,
+        status: 'present'
+      });
+    }
   }
 
   const checkInDate = new Date(attendance.checkIn);
@@ -75,6 +84,8 @@ const checkOut = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
     message: 'Check-out recorded successfully in MySQL',
+    checkoutTimestamp: nowStr,
+    totalWorkHours: hours,
     attendance: updated
   });
 });

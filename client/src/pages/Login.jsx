@@ -11,7 +11,7 @@ export default function Login() {
   const { success, error } = useToast();
 
   const [companyCode, setCompanyCode] = useState('OI');
-  const [identifier, setIdentifier] = useState('shruthika.dutta@odooindia.com');
+  const [identifier, setIdentifier] = useState('OI220003');
   const [password, setPassword] = useState('Password@123');
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -42,13 +42,13 @@ export default function Login() {
 
   const quickFillShruthika = () => {
     setCompanyCode('OI');
-    setIdentifier('shruthika.dutta@odooindia.com');
+    setIdentifier('OI220003');
     setPassword('Password@123');
   };
 
   const quickFillAarav = () => {
     setCompanyCode('OI');
-    setIdentifier('aarav.mehta@odooindia.com');
+    setIdentifier('OI230004');
     setPassword('Password@123');
   };
 
@@ -130,13 +130,14 @@ export default function Login() {
             className="btn btn-sm"
             style={{ flex: 1, backgroundColor: 'transparent', color: 'var(--text-dim)' }}
             onClick={() => navigate('/admin/login')}
+            data-testid="switch-admin-portal-btn"
           >
             👑 Admin Portal
           </button>
         </div>
 
         {errorMessage && (
-          <div className="banner-error" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div className="banner-error" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }} data-testid="login-error-banner">
             <AlertCircle size={16} /> {errorMessage}
           </div>
         )}
@@ -152,6 +153,7 @@ export default function Login() {
                 onChange={(e) => setCompanyCode(e.target.value)}
                 required
                 style={{ textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}
+                data-testid="company-code-input"
               />
             </div>
           </div>
@@ -161,9 +163,10 @@ export default function Login() {
             <div className="input-wrap">
               <input
                 type="text"
-                placeholder="shruthika.dutta@odooindia.com or OI..."
+                placeholder="OI220003 or shruthika.dutta@odooindia.com"
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
+                data-testid="identifier-input"
                 required
               />
             </div>
@@ -177,6 +180,7 @@ export default function Login() {
                 placeholder="••••••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                data-testid="password-input"
                 required
               />
             </div>
@@ -187,6 +191,7 @@ export default function Login() {
             className="btn btn-primary btn-lg"
             style={{ width: '100%', marginTop: '0.75rem' }}
             disabled={submitting}
+            data-testid="login-submit-btn"
           >
             {submitting ? <span className="spinner" /> : 'Sign In to Workspace'}
           </button>
@@ -203,6 +208,7 @@ export default function Login() {
               className="btn btn-secondary btn-sm"
               onClick={quickFillShruthika}
               style={{ fontSize: '0.78rem' }}
+              data-testid="demo-login-btn"
             >
               👩‍💻 Shruthika (Eng)
             </button>
@@ -211,6 +217,7 @@ export default function Login() {
               className="btn btn-secondary btn-sm"
               onClick={quickFillAarav}
               style={{ fontSize: '0.78rem' }}
+              data-testid="demo-login-aarav"
             >
               🎨 Aarav (Design)
             </button>
@@ -219,7 +226,7 @@ export default function Login() {
 
         <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
           Register a new organization?{' '}
-          <Link to="/register" style={{ color: 'var(--copper)', fontWeight: 700 }}>
+          <Link to="/register" style={{ color: 'var(--copper)', fontWeight: 700 }} data-testid="register-link">
             Create Account
           </Link>
         </div>

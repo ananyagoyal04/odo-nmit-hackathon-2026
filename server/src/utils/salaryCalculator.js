@@ -39,5 +39,6 @@ function computeSalary(monthlyWage) {
 }
 
 module.exports = {
-  computeSalary
+  computeSalary,
+  calculateSalaryBreakdown: computeSalary
 };

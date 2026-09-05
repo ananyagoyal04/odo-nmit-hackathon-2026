@@ -11,8 +11,8 @@ export default function AdminLogin() {
   const { success, error } = useToast();
 
   const [companyCode, setCompanyCode] = useState('OI');
-  const [identifier, setIdentifier] = useState('ananya00476@gmail.com');
-  const [password, setPassword] = useState('nutan@1979');
+  const [identifier, setIdentifier] = useState('OI220001');
+  const [password, setPassword] = useState('Password@123');
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -29,7 +29,6 @@ export default function AdminLogin() {
       });
 
       if (res.success) {
-        // Enforce Admin / HR clearance
         if (!['SUPER_ADMIN', 'HR'].includes(res.user.role)) {
           setErrorMessage('Access Denied: Standard Employee accounts must sign in via the Employee Workspace portal.');
           return;
@@ -48,13 +47,13 @@ export default function AdminLogin() {
 
   const quickFillAdmin = () => {
     setCompanyCode('OI');
-    setIdentifier('ananya00476@gmail.com');
-    setPassword('nutan@1979');
+    setIdentifier('OI220001');
+    setPassword('Password@123');
   };
 
   const quickFillHR = () => {
     setCompanyCode('OI');
-    setIdentifier('hr@odooindia.com');
+    setIdentifier('OI220002');
     setPassword('Password@123');
   };
 
@@ -121,6 +120,7 @@ export default function AdminLogin() {
             className="btn btn-sm"
             style={{ flex: 1, backgroundColor: 'transparent', color: 'var(--text-dim)' }}
             onClick={() => navigate('/login')}
+            data-testid="switch-employee-portal-btn"
           >
             💻 Employee Portal
           </button>
@@ -140,7 +140,7 @@ export default function AdminLogin() {
         </div>
 
         {errorMessage && (
-          <div className="banner-error" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div className="banner-error" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }} data-testid="admin-login-error-banner">
             <AlertCircle size={16} /> {errorMessage}
           </div>
         )}
@@ -156,6 +156,7 @@ export default function AdminLogin() {
                 onChange={(e) => setCompanyCode(e.target.value)}
                 required
                 style={{ textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}
+                data-testid="company-code-input"
               />
             </div>
           </div>
@@ -165,9 +166,10 @@ export default function AdminLogin() {
             <div className="input-wrap">
               <input
                 type="text"
-                placeholder="admin@odooindia.com or OI..."
+                placeholder="OI220001 or admin@odooindia.com"
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
+                data-testid="identifier-input"
                 required
               />
             </div>
@@ -181,6 +183,7 @@ export default function AdminLogin() {
                 placeholder="••••••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                data-testid="password-input"
                 required
               />
             </div>
@@ -191,6 +194,7 @@ export default function AdminLogin() {
             className="btn btn-primary btn-lg"
             style={{ width: '100%', marginTop: '0.75rem' }}
             disabled={submitting}
+            data-testid="admin-login-submit-btn"
           >
             {submitting ? <span className="spinner" /> : 'Authenticate & Access Admin Dashboard'}
           </button>
@@ -207,16 +211,18 @@ export default function AdminLogin() {
               className="btn btn-secondary btn-sm"
               onClick={quickFillAdmin}
               style={{ fontSize: '0.78rem' }}
+              data-testid="demo-login-superadmin"
             >
-              👑 Super Admin (Ananya)
+              👑 Super Admin (OI220001)
             </button>
             <button
               type="button"
               className="btn btn-secondary btn-sm"
               onClick={quickFillHR}
               style={{ fontSize: '0.78rem' }}
+              data-testid="demo-login-hr"
             >
-              💼 HR Manager (Priya)
+              💼 HR Manager (OI220002)
             </button>
           </div>
         </div>

@@ -1,0 +1,1797 @@
+[
+  {
+    "id": "TC001",
+    "title": "Unauthenticated visitor is blocked from protected workspace pages",
+    "description": "This verifies that protected workspace routes are not accessible before signing in and the user is redirected to the login experience.",
+    "category": "Authentication and access control",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the login experience is displayed"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /attendance"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the login experience is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Employee signs in and reaches the dashboard",
+    "description": "This verifies that an employee can sign in with valid credentials and access the main workspace.",
+    "category": "Employee Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login identifier with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the dashboard is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Employee clocks in and sees the active session begin",
+    "description": "This verifies that an employee can start a work session from attendance and immediately see the session become active.",
+    "category": "Real-Time Attendance Tracking",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the employee credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the attendance section"
+      },
+      {
+        "type": "action",
+        "description": "Clock in for the current day"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the active session timer is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a current work session is recorded"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Administrator signs in through the admin portal",
+    "description": "This verifies that a super admin or HR executive can sign in through the dedicated administrator portal and reach the executive workspace.",
+    "category": "Admin Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /admin/login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the administrator identifier with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the administrator password with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the executive workspace is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Employee clocks out and the completed session is saved",
+    "description": "This verifies that an employee can end an active attendance session and see it recorded as completed.",
+    "category": "Real-Time Attendance Tracking",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the employee credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the attendance section"
+      },
+      {
+        "type": "action",
+        "description": "Clock in for the current day"
+      },
+      {
+        "type": "action",
+        "description": "Clock out for the current day"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the active session timer is no longer displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the completed work session is shown in the attendance history"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "New tenant administrator registers the company account and reaches admin sign in",
+    "description": "This verifies that a tenant creator can complete registration for a new company and proceed to the administrator login flow.",
+    "category": "Authentication and access control",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /register"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the company registration details"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the initial administrator account details"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the registration confirmation is displayed"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /admin/login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the admin login experience is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "New company registration completes successfully",
+    "description": "This verifies that a new tenant can create an organization and initial administrator account and see a completion confirmation.",
+    "category": "Company Registration",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /register"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the company name field with Acme Workforce"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the company code field with acme-workforce"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the administrator name field with Alex Admin"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the work email field with alex.admin@example.com"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with a valid strong password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the registration form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a registration completion confirmation is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Employee uses a demo credential shortcut to sign in",
+    "description": "This verifies that a demo credential shortcut pre-fills valid sign-in details and allows access to the dashboard.",
+    "category": "Employee Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Use a demo credential shortcut"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the dashboard is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Submit a new expense claim",
+    "description": "This verifies an employee can create a reimbursement claim and see it added to the expense list.",
+    "category": "Expense Reimbursement Pipeline",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /expenses"
+      },
+      {
+        "type": "action",
+        "description": "Open the expense submission flow"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the expense title field with Travel reimbursement"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the amount field with a valid amount"
+      },
+      {
+        "type": "action",
+        "description": "Select a category"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid date into the date field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the receipt URL field with a valid receipt URL"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the description field with Business travel expense"
+      },
+      {
+        "type": "action",
+        "description": "Submit the expense claim"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new expense claim appears in the expense list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the claim is marked as pending"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Employee submits a new time-off request",
+    "description": "This verifies that an employee can create a leave request and see it added to the ledger.",
+    "category": "Leave and Time-Off Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the employee credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the time-off section"
+      },
+      {
+        "type": "action",
+        "description": "Open the time-off request flow"
+      },
+      {
+        "type": "action",
+        "description": "Select a leave type"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid start date into the start date field"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid end date into the end date field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the reason field with a leave request reason"
+      },
+      {
+        "type": "action",
+        "description": "Submit the time-off request"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new leave request appears in the ledger"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the leave balance cards are still visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "HR searches the employee directory and adds a new employee",
+    "description": "This verifies that an HR user can search the employee directory and onboard a new employee record that appears in the list.",
+    "category": "Employee Directory & Profiles",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /admin/login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the administrator credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the admin login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the employees section"
+      },
+      {
+        "type": "action",
+        "description": "Search employees by a name or designation"
+      },
+      {
+        "type": "action",
+        "description": "Open the add employee flow"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the new employee details"
+      },
+      {
+        "type": "action",
+        "description": "Submit the new employee record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new employee appears in the directory"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the search results are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC012",
+    "title": "Open the expense submission flow",
+    "description": "This verifies an employee can start the reimbursement workflow from the expenses page.",
+    "category": "Expense Reimbursement Pipeline",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /expenses"
+      },
+      {
+        "type": "action",
+        "description": "Open the expense submission flow"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the expense submission form is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC013",
+    "title": "Employee sees an error for invalid sign-in details",
+    "description": "This verifies that invalid credentials are rejected and an error message is shown on the sign-in page.",
+    "category": "Employee Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login identifier with invalid-user"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with invalid-password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the sign-in form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a sign-in error message is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC014",
+    "title": "Post a new company announcement",
+    "description": "Verifies that an authorized user can create and publish a new company announcement and see it appear on the board.",
+    "category": "Company Announcements",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /announcements"
+      },
+      {
+        "type": "action",
+        "description": "Open the announcement creation flow"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the announcement content with a new company bulletin"
+      },
+      {
+        "type": "action",
+        "description": "Publish the announcement"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new announcement appears on the board"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC015",
+    "title": "Approver approves a pending time-off request",
+    "description": "This verifies that a manager or HR approver can approve a pending leave request and see the status update in the ledger.",
+    "category": "Leave and Time-Off Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the employee credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the time-off section"
+      },
+      {
+        "type": "action",
+        "description": "Review the pending leave requests"
+      },
+      {
+        "type": "action",
+        "description": "Approve a pending leave request"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the leave request status shows approved"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated request remains visible in the ledger"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC016",
+    "title": "HR edits an employee profile and sees the updates reflected",
+    "description": "This verifies that an HR user can open an employee profile, update profile information, and see the saved changes on the profile page.",
+    "category": "Employee Directory & Profiles",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /admin/login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the administrator credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the admin login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the employees section"
+      },
+      {
+        "type": "action",
+        "description": "Open an employee profile"
+      },
+      {
+        "type": "action",
+        "description": "Edit the employee bio or contact information"
+      },
+      {
+        "type": "action",
+        "description": "Save the profile changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated profile information is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the employee profile remains accessible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC017",
+    "title": "View salary table on the payroll page",
+    "description": "This verifies an authorized user can open payroll and see the employee salary table needed to review compensation.",
+    "category": "Automated Payroll & Printable Payslips",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /payroll"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the employee salary table is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify payroll totals are visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC018",
+    "title": "Approve a pending expense claim",
+    "description": "This verifies a manager can approve a pending reimbursement and see the status updated in the ledger.",
+    "category": "Expense Reimbursement Pipeline",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /expenses"
+      },
+      {
+        "type": "action",
+        "description": "Approve a pending expense claim"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the claim status is updated to approved"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated expense ledger is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC019",
+    "title": "Approver rejects a pending time-off request",
+    "description": "This verifies that a manager or HR approver can reject a pending leave request and see the status update in the ledger.",
+    "category": "Leave and Time-Off Management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the employee credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the time-off section"
+      },
+      {
+        "type": "action",
+        "description": "Review the pending leave requests"
+      },
+      {
+        "type": "action",
+        "description": "Reject a pending leave request"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the leave request status shows rejected"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated request remains visible in the ledger"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC020",
+    "title": "Open a payslip from the payroll table",
+    "description": "This verifies an authorized user can open an employee payslip from payroll and reach the detailed salary slip view.",
+    "category": "Automated Payroll & Printable Payslips",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /payroll"
+      },
+      {
+        "type": "action",
+        "description": "Open a payslip for an employee"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the payslip details are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify earnings and deductions are visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC021",
+    "title": "Reject a pending expense claim",
+    "description": "This verifies a manager can reject a pending reimbursement and see the status updated in the ledger.",
+    "category": "Expense Reimbursement Pipeline",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /expenses"
+      },
+      {
+        "type": "action",
+        "description": "Reject a pending expense claim"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the claim status is updated to rejected"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated expense ledger is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC022",
+    "title": "Print a payslip from the payslip view",
+    "description": "This verifies an authorized user can access the payslip view and trigger the printable salary slip action.",
+    "category": "Automated Payroll & Printable Payslips",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /payroll"
+      },
+      {
+        "type": "action",
+        "description": "Open a payslip for an employee"
+      },
+      {
+        "type": "action",
+        "description": "Print the payslip"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the printable payslip view is available"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC023",
+    "title": "HR updates compensation details and sees payroll reflect the employee",
+    "description": "This verifies that an HR user can edit compensation-related profile fields and then view the employee in payroll.",
+    "category": "Employee Directory & Profiles",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /admin/login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the administrator credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the admin login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the employees section"
+      },
+      {
+        "type": "action",
+        "description": "Open an employee profile"
+      },
+      {
+        "type": "action",
+        "description": "Edit the employee bank or compensation details"
+      },
+      {
+        "type": "action",
+        "description": "Save the profile changes"
+      },
+      {
+        "type": "action",
+        "description": "Click the payroll section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the employee appears in the payroll table"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify payroll salary information is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC024",
+    "title": "Add a new performance goal",
+    "description": "This verifies a user can create a new OKR goal and see it appear in the goals list.",
+    "category": "OKR Performance Goals",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /performance"
+      },
+      {
+        "type": "action",
+        "description": "Open the add goal flow"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the goal name field with Improve onboarding completion"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the goal description field with Increase onboarding completion rate"
+      },
+      {
+        "type": "action",
+        "description": "Submit the goal"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new goal appears in the goals list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new goal card is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC025",
+    "title": "Manager posts a new announcement",
+    "description": "This verifies that an authorized user can create a new company bulletin and see it listed on the announcements board.",
+    "category": "Company Communication and Planning",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /admin/login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the administrator credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the admin login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the announcements section"
+      },
+      {
+        "type": "action",
+        "description": "Open the post creator"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the announcement content with a company bulletin"
+      },
+      {
+        "type": "action",
+        "description": "Submit the announcement"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new announcement is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the announcements board remains visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC026",
+    "title": "Review the employee salary table with calculated totals",
+    "description": "This verifies an authorized user can see salary calculation fields needed to review compensation at a glance.",
+    "category": "Automated Payroll & Printable Payslips",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /payroll"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify monthly CTC and net salary information is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC027",
+    "title": "Employee reviews attendance history and heatmap",
+    "description": "This verifies that an employee can inspect attendance history and the monthly heatmap from the attendance page.",
+    "category": "Real-Time Attendance Tracking",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the employee credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the attendance section"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the attendance history section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the monthly attendance heatmap is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify attendance history entries are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC028",
+    "title": "Read pinned and recent announcements",
+    "description": "Verifies that a logged-in user can open the announcements board and review pinned and recent company notices.",
+    "category": "Company Announcements",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /announcements"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify pinned announcements are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify recent announcements are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC029",
+    "title": "View the branded salary slip layout",
+    "description": "This verifies an authorized user can open a payslip and see the company-branded salary slip presentation.",
+    "category": "Automated Payroll & Printable Payslips",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /payroll"
+      },
+      {
+        "type": "action",
+        "description": "Open a payslip for an employee"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the branded salary slip layout is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC030",
+    "title": "Update goal progress and status",
+    "description": "This verifies a user can change goal progress and status and see the updated tracking state on the card.",
+    "category": "OKR Performance Goals",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /performance"
+      },
+      {
+        "type": "action",
+        "description": "Adjust a goal progress slider"
+      },
+      {
+        "type": "action",
+        "description": "Update the goal status"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated progress is reflected on the goal card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated goal status is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC031",
+    "title": "Employee reads company announcements",
+    "description": "This verifies that an authenticated user can open the announcements board and view company notices.",
+    "category": "Company Communication and Planning",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the employee credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the announcements section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify company announcements are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify pinned notices are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC032",
+    "title": "Registration shows password strength guidance",
+    "description": "This verifies that password strength feedback is shown while a new tenant is entering registration details.",
+    "category": "Company Registration",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /register"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with a weak password"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify password strength guidance is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC033",
+    "title": "HR reviews department headcount after employee changes",
+    "description": "This verifies that department tracking reflects employee additions or profile updates in the departments view.",
+    "category": "Employee Directory & Profiles",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /admin/login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the administrator credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the admin login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the employees section"
+      },
+      {
+        "type": "action",
+        "description": "Open an employee profile"
+      },
+      {
+        "type": "action",
+        "description": "Save a profile change if needed"
+      },
+      {
+        "type": "action",
+        "description": "Click the departments section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify department headcount information is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify department leadership information is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC034",
+    "title": "Filter goals by quarter and department",
+    "description": "This verifies a user can narrow the performance goal list using the available filters.",
+    "category": "OKR Performance Goals",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /performance"
+      },
+      {
+        "type": "action",
+        "description": "Select a quarter filter"
+      },
+      {
+        "type": "action",
+        "description": "Select a department filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the filtered goal cards are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify matching performance goals are visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC035",
+    "title": "Manager tracks performance goals for a quarter",
+    "description": "This verifies that a manager can filter performance goals and add or update a goal for quarterly tracking.",
+    "category": "Company Communication and Planning",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /admin/login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the administrator credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the admin login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the performance section"
+      },
+      {
+        "type": "action",
+        "description": "Filter goals by a quarter"
+      },
+      {
+        "type": "action",
+        "description": "Open the add goal flow"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the goal details"
+      },
+      {
+        "type": "action",
+        "description": "Submit the new goal"
+      },
+      {
+        "type": "action",
+        "description": "Update the goal progress"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new goal is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify goal progress information is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC036",
+    "title": "Open an announcement to read details",
+    "description": "Verifies that a logged-in user can open a company announcement and view its full details.",
+    "category": "Company Announcements",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /announcements"
+      },
+      {
+        "type": "action",
+        "description": "Open the first available announcement"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the announcement details are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC037",
+    "title": "Return to the payroll table after viewing a payslip",
+    "description": "This verifies an authorized user can leave the payslip view and continue reviewing the payroll list.",
+    "category": "Automated Payroll & Printable Payslips",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /payroll"
+      },
+      {
+        "type": "action",
+        "description": "Open a payslip for an employee"
+      },
+      {
+        "type": "action",
+        "description": "Close the payslip view"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the employee salary table is displayed again"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC038",
+    "title": "Filter announcements by category",
+    "description": "Verifies that a logged-in user can filter the announcement board by category and see only matching notices.",
+    "category": "Company Announcements",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /announcements"
+      },
+      {
+        "type": "action",
+        "description": "Select a category filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the filtered announcement list is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC039",
+    "title": "View matching goals after applying filters",
+    "description": "This verifies a user can inspect the list of goals returned by the selected performance filters.",
+    "category": "OKR Performance Goals",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /performance"
+      },
+      {
+        "type": "action",
+        "description": "Select a quarter filter"
+      },
+      {
+        "type": "action",
+        "description": "Select a department filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the goal list updates to show matching results"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC040",
+    "title": "User enters invalid login credentials and sees a validation error",
+    "description": "This verifies that the login form rejects invalid credentials and shows an error without entering the workspace.",
+    "category": "Authentication and access control",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the employee credentials with invalid values"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with invalid values"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a login validation error is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the workspace is not displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC041",
+    "title": "Keep draft content from publishing empty announcements",
+    "description": "Verifies that a user cannot publish an announcement without entering required content and remains on the creation flow with validation visible.",
+    "category": "Company Announcements",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /announcements"
+      },
+      {
+        "type": "action",
+        "description": "Open the announcement creation flow"
+      },
+      {
+        "type": "action",
+        "description": "Publish the announcement without entering content"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a validation error is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC042",
+    "title": "Submit an expense claim with missing receipt information",
+    "description": "This verifies the expense form shows validation feedback when a required receipt reference is omitted.",
+    "category": "Expense Reimbursement Pipeline",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /expenses"
+      },
+      {
+        "type": "action",
+        "description": "Open the expense submission flow"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the expense title field with Missing receipt test"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the amount field with a valid amount"
+      },
+      {
+        "type": "action",
+        "description": "Select a category"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid date into the date field"
+      },
+      {
+        "type": "action",
+        "description": "Leave the receipt URL field empty"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the description field with Test claim without receipt"
+      },
+      {
+        "type": "action",
+        "description": "Submit the expense claim"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a receipt validation error is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC043",
+    "title": "Preserve announcement board in an empty category state",
+    "description": "Verifies that filtering announcements to a category with no matches shows an empty state instead of results.",
+    "category": "Company Announcements",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /announcements"
+      },
+      {
+        "type": "action",
+        "description": "Select a category filter with no matching announcements"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an empty state message is displayed"
+      }
+    ],
+    "priority": "Low"
+  }
+]

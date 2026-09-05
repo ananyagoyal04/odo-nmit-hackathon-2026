@@ -26,7 +26,8 @@ const getEmployees = asyncHandler(async (req, res) => {
     total: employees.length,
     page: 1,
     totalPages: 1,
-    employees
+    employees,
+    data: employees
   });
 });
 
@@ -34,7 +35,10 @@ const getEmployees = asyncHandler(async (req, res) => {
  * GET /api/employees/:id
  */
 const getEmployeeById = asyncHandler(async (req, res) => {
-  const employee = await db.findUserById(req.params.id);
+  let employee = await db.findUserById(req.params.id);
+  if (!employee) {
+    employee = await db.findUserByLoginOrEmail(req.params.id);
+  }
   if (!employee || employee.companyId !== req.companyId) {
     throw ApiError.notFound('Employee record not found.');
   }
@@ -44,6 +48,8 @@ const getEmployeeById = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
     employee,
+    data: employee,
+    ...employee,
     leaveBalance
   });
 });
@@ -146,6 +152,8 @@ const createEmployee = asyncHandler(async (req, res) => {
     success: true,
     message: 'Employee created successfully in MySQL',
     employee,
+    data: employee,
+    ...employee,
     credentials: {
       loginId,
       email: employee.email,
