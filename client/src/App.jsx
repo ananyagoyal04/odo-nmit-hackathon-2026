@@ -29,62 +29,55 @@ export default function App() {
       <BrowserRouter>
         <ToastProvider>
           <AuthProvider>
-          <Routes>
-            {/* Public Auth Routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/register" element={<Register />} />
+            <Routes>
+              {/* Public Auth Routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/register" element={<Register />} />
 
-            {/* Protected Workspace Routes */}
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <Layout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<Navigate to="/dashboard" replace />} />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="profile" element={<MyProfile />} />
-              <Route path="employees" element={<Employees />} />
-              <Route path="employees/:id" element={<EmployeeProfile />} />
-              <Route path="attendance" element={<Attendance />} />
-              <Route path="timeoff" element={<TimeOff />} />
-              <Route path="announcements" element={<Announcements />} />
-              <Route path="expenses" element={<Expenses />} />
-              <Route path="performance" element={<Performance />} />
-              
-              {/* Role-gated Routes */}
+              {/* Protected Workspace Routes */}
               <Route
-                path="payroll"
+                path="/"
                 element={
-                  <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'HR']}>
-                    <Payroll />
+                  <ProtectedRoute>
+                    <Layout />
                   </ProtectedRoute>
                 }
-              />
-              <Route
-                path="departments"
-                element={
-                  <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'HR']}>
-                    <Departments />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="audit-logs"
-                element={
-                  <ProtectedRoute allowedRoles={['SUPER_ADMIN']}>
-                    <AuditLogs />
-                  </ProtectedRoute>
-                }
-              />
-            </Route>
+              >
+                <Route index element={<Navigate to="/dashboard" replace />} />
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="profile" element={<MyProfile />} />
+                <Route path="employees" element={<Employees />} />
+                <Route path="employees/:id" element={<EmployeeProfile />} />
+                <Route path="attendance" element={<Attendance />} />
+                <Route path="timeoff" element={<TimeOff />} />
+                <Route path="payroll" element={<Payroll />} />
+                <Route path="announcements" element={<Announcements />} />
+                <Route path="expenses" element={<Expenses />} />
+                <Route path="performance" element={<Performance />} />
 
-            {/* 404 Catch-All */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+                {/* Management Role-gated Routes */}
+                <Route
+                  path="departments"
+                  element={
+                    <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'HR']}>
+                      <Departments />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="audit-logs"
+                  element={
+                    <ProtectedRoute allowedRoles={['SUPER_ADMIN']}>
+                      <AuditLogs />
+                    </ProtectedRoute>
+                  }
+                />
+              </Route>
+
+              {/* 404 Catch-All */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
           </AuthProvider>
         </ToastProvider>
       </BrowserRouter>

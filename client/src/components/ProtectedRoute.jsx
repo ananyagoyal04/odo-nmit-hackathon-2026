@@ -1,10 +1,12 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { ShieldAlert, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function ProtectedRoute({ children, allowedRoles }) {
   const { isAuthenticated, user, loading } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -19,7 +21,7 @@ export default function ProtectedRoute({ children, allowedRoles }) {
         gap: '1rem'
       }}>
         <div className="spinner" style={{ width: 32, height: 32, borderWidth: 3 }} />
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Loading workforce session...</p>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Verifying workforce session...</p>
       </div>
     );
   }
@@ -34,19 +36,33 @@ export default function ProtectedRoute({ children, allowedRoles }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        height: '80vh',
+        minHeight: '70vh',
         flexDirection: 'column',
-        gap: '1rem',
-        textAlign: 'center'
+        gap: '1.25rem',
+        textAlign: 'center',
+        padding: '2rem'
       }}>
-        <div className="badge badge-absent" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>
-          Access Forbidden (403)
+        <div style={{
+          width: 64,
+          height: 64,
+          borderRadius: '50%',
+          backgroundColor: 'rgba(220, 88, 109, 0.15)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'var(--rose)'
+        }}>
+          <ShieldAlert size={32} />
         </div>
-        <h2>Insufficient Permissions</h2>
-        <p style={{ maxWidth: 420, color: 'var(--text-muted)' }}>
-          Your current role (<b>{user.role}</b>) does not have permission to view this section.
-        </p>
-        <Navigate to="/dashboard" replace />
+        <div>
+          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>Management Access Restricted</h2>
+          <p style={{ maxWidth: 460, color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>
+            This section is reserved for <b>{allowedRoles.join(' / ')}</b> privileges. Your current active role is <b>{user.role}</b>.
+          </p>
+        </div>
+        <button className="btn btn-primary" onClick={() => navigate('/dashboard')}>
+          <ArrowLeft size={16} /> Return to Workspace Dashboard
+        </button>
       </div>
     );
   }

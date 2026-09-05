@@ -19,7 +19,9 @@ const getDepartments = asyncHandler(async (req, res) => {
  * POST /api/departments
  */
 const createDepartment = asyncHandler(async (req, res) => {
-  const { name, description, managerId } = req.body;
+  const { name, description } = req.body;
+  const managerId = req.body.managerId || req.body.manager || null;
+
   if (!name || !name.trim()) {
     throw ApiError.badRequest('Department name is required.');
   }
@@ -42,7 +44,9 @@ const createDepartment = asyncHandler(async (req, res) => {
  * PATCH /api/departments/:id
  */
 const updateDepartment = asyncHandler(async (req, res) => {
-  const { name, description, managerId } = req.body;
+  const { name, description } = req.body;
+  const managerId = req.body.managerId !== undefined ? req.body.managerId : req.body.manager;
+
   const updates = [];
   const params = [];
 

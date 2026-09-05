@@ -69,7 +69,7 @@ export default function CommandPalette({ isOpen, onClose }) {
   const navItems = [
     { title: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { title: 'Employee Directory', path: '/employees', icon: Users },
-    ...(['SUPER_ADMIN', 'HR'].includes(user?.role) ? [{ title: 'Payroll & Compensation Matrix', path: '/payroll', icon: DollarSign }] : []),
+    { title: 'Payroll & Statutory Payslips', path: '/payroll', icon: DollarSign },
     { title: 'Attendance & Tracking', path: '/attendance', icon: Clock },
     { title: 'Time Off & Leaves', path: '/timeoff', icon: CalendarOff },
     { title: 'Company Notice Board', path: '/announcements', icon: Bell },

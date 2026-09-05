@@ -7,7 +7,8 @@ import {
   Clock,
   Calendar,
   AlertTriangle,
-  FileText
+  FileText,
+  User
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
@@ -20,7 +21,7 @@ export default function TimeOff() {
   const { success, error } = useToast();
 
   const [activeTab, setActiveTab] = useState('my'); // 'my' | 'company'
-  const [balance, setBalance] = useState({ pto: { total: 24, used: 0 }, sick: { total: 10, used: 0 } });
+  const [balance, setBalance] = useState({ pto: { total: 24, used: 0 }, sick: { total: 10, used: 0 }, ptoRemaining: 24, sickRemaining: 10 });
   const [myRequests, setMyRequests] = useState([]);
   const [companyRequests, setCompanyRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -47,8 +48,19 @@ export default function TimeOff() {
       setLoading(true);
       const res = await timeOffApi.getMyTimeOff();
       if (res.success) {
-        setBalance(res.balance);
-        setMyRequests(res.requests);
+        const bal = res.balance || res.balances || {};
+        const ptoUsed = bal.pto?.used ?? 0;
+        const ptoTot = bal.pto?.total ?? 24;
+        const sickUsed = bal.sick?.used ?? 0;
+        const sickTot = bal.sick?.total ?? 10;
+
+        setBalance({
+          pto: { total: ptoTot, used: ptoUsed },
+          sick: { total: sickTot, used: sickUsed },
+          ptoRemaining: res.ptoRemaining ?? (ptoTot - ptoUsed),
+          sickRemaining: res.sickRemaining ?? (sickTot - sickUsed)
+        });
+        setMyRequests(res.requests || []);
       }
     } catch (err) {
       error(err?.data?.message || err.message || 'Failed to fetch time-off details');
@@ -63,7 +75,7 @@ export default function TimeOff() {
       setLoading(true);
       const res = await timeOffApi.getCompanyTimeOff();
       if (res.success) {
-        setCompanyRequests(res.requests);
+        setCompanyRequests(res.requests || []);
       }
     } catch (err) {
       error(err?.data?.message || err.message || 'Failed to fetch company leave requests');
@@ -86,7 +98,15 @@ export default function TimeOff() {
     e.preventDefault();
     setRequestBusy(true);
     try {
-      const res = await timeOffApi.requestTimeOff(requestForm);
+      const payload = {
+        leaveType: requestForm.type,
+        type: requestForm.type,
+        startDate: requestForm.startDate,
+        endDate: requestForm.endDate,
+        reason: requestForm.reason
+      };
+
+      const res = await timeOffApi.requestTimeOff(payload);
       if (res.success) {
         success('Time-off request submitted successfully!');
         setIsRequestModalOpen(false);
@@ -97,6 +117,7 @@ export default function TimeOff() {
           reason: ''
         });
         fetchMyTimeOff();
+        if (activeTab === 'company') fetchCompanyTimeOff();
       }
     } catch (err) {
       error(err?.data?.message || err.message || 'Failed to submit time-off request');
@@ -142,6 +163,9 @@ export default function TimeOff() {
     }
   };
 
+  const ptoRem = balance.ptoRemaining ?? (balance.pto?.total - balance.pto?.used) ?? 24;
+  const sickRem = balance.sickRemaining ?? (balance.sick?.total - balance.sick?.used) ?? 10;
+
   return (
     <div>
       {/* Page Header */}
@@ -149,7 +173,7 @@ export default function TimeOff() {
         <div>
           <h1>Time Off & Leaves</h1>
           <p className="page-subtitle">
-            Manage personal leave balances and process organizational time-off requests.
+            Manage personal annual leave quotas, casual leaves, and organizational absence workflows.
           </p>
         </div>
 
@@ -162,15 +186,15 @@ export default function TimeOff() {
       <div className="grid-2" style={{ marginBottom: '1.75rem' }}>
         <StatCard
           title="Paid Time Off (PTO) Remaining"
-          value={`${balance.ptoRemaining ?? 24} Days`}
+          value={`${ptoRem} Days`}
           subtext={`Used: ${balance.pto?.used || 0} / ${balance.pto?.total || 24} annual days`}
           icon={Calendar}
           variant="copper"
         />
 
         <StatCard
-          title="Sick Leave Remaining"
-          value={`${balance.sickRemaining ?? 10} Days`}
+          title="Sick & Medical Leave Remaining"
+          value={`${sickRem} Days`}
           subtext={`Used: ${balance.sick?.used || 0} / ${balance.sick?.total || 10} annual days`}
           icon={CalendarOff}
           variant="copper"
@@ -191,7 +215,7 @@ export default function TimeOff() {
             className={`tab-btn ${activeTab === 'company' ? 'active' : ''}`}
             onClick={() => setActiveTab('company')}
           >
-            <Clock size={16} /> Approvals & Company Requests
+            <Clock size={16} /> Approvals & Company Roster ({companyRequests.filter((r) => r.status === 'pending').length} Pending)
           </button>
         )}
       </div>
@@ -202,45 +226,51 @@ export default function TimeOff() {
           <table>
             <thead>
               <tr>
-                <th>Type</th>
-                <th>Dates</th>
-                <th>Reason</th>
-                <th>Status</th>
-                <th>Review Details</th>
+                <th>Leave Category</th>
+                <th>Dates & Duration</th>
+                <th>Reason / Notes</th>
+                <th>Approval Status</th>
+                <th>Reviewer Information</th>
               </tr>
             </thead>
             <tbody>
-              {myRequests.length === 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan={5} style={{ textAlign: 'center', padding: '2rem' }}>
+                    <div className="spinner" style={{ margin: '0 auto' }} />
+                  </td>
+                </tr>
+              ) : myRequests.length === 0 ? (
                 <tr>
                   <td colSpan={5} style={{ textAlign: 'center', padding: '2.5rem', color: 'var(--text-dim)' }}>
-                    No time-off requests submitted yet.
+                    No time-off requests submitted yet. Click &quot;Request Time Off&quot; to apply for leaves.
                   </td>
                 </tr>
               ) : (
                 myRequests.map((req) => (
-                  <tr key={req._id}>
+                  <tr key={req._id || req.id}>
                     <td>
-                      <span className="badge badge-copper">{req.type}</span>
+                      <span className="badge badge-copper">{req.leaveType || req.type || 'Paid Time Off'}</span>
                     </td>
                     <td style={{ fontWeight: 600 }}>
-                      {req.startDate} {req.startDate !== req.endDate ? `→ ${req.endDate}` : ''}
+                      {req.startDate} {req.startDate !== req.endDate ? `→ ${req.endDate}` : ''} ({req.days || 1}d)
                     </td>
                     <td style={{ maxWidth: 300, color: 'var(--text-muted)' }}>
                       {req.reason || '—'}
                     </td>
                     <td>
-                      <span className={`badge badge-${req.status}`}>
-                        {req.status}
+                      <span className={`badge badge-${req.status === 'approved' ? 'success' : req.status === 'rejected' ? 'danger' : 'warning'}`}>
+                        {req.status?.toUpperCase() || 'PENDING'}
                       </span>
                     </td>
                     <td style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
                       {req.status === 'approved' && (
-                        <span>Approved by {req.approvedBy?.fullName || 'Manager'}</span>
+                        <span style={{ color: 'var(--success)' }}>✓ Approved by Management</span>
                       )}
                       {req.status === 'rejected' && (
-                        <span style={{ color: 'var(--danger)' }}>{req.rejectionReason || 'Rejected'}</span>
+                        <span style={{ color: 'var(--danger)' }}>✗ {req.rejectionReason || 'Rejected by HR'}</span>
                       )}
-                      {req.status === 'pending' && <span>Awaiting review</span>}
+                      {req.status === 'pending' && <span>Awaiting Manager Review</span>}
                     </td>
                   </tr>
                 ))
@@ -257,15 +287,21 @@ export default function TimeOff() {
             <thead>
               <tr>
                 <th>Employee</th>
-                <th>Type</th>
-                <th>Date Range</th>
+                <th>Category</th>
+                <th>Date Range & Days</th>
                 <th>Reason</th>
                 <th>Status</th>
-                <th>Actions</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {companyRequests.length === 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan={6} style={{ textAlign: 'center', padding: '2rem' }}>
+                    <div className="spinner" style={{ margin: '0 auto' }} />
+                  </td>
+                </tr>
+              ) : companyRequests.length === 0 ? (
                 <tr>
                   <td colSpan={6} style={{ textAlign: 'center', padding: '2.5rem', color: 'var(--text-dim)' }}>
                     No company time-off requests found.
@@ -273,7 +309,7 @@ export default function TimeOff() {
                 </tr>
               ) : (
                 companyRequests.map((req) => (
-                  <tr key={req._id}>
+                  <tr key={req._id || req.id}>
                     <td>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                         <div
@@ -285,27 +321,27 @@ export default function TimeOff() {
                             fontSize: '0.8rem'
                           }}
                         >
-                          {req.employeeId?.firstName?.[0]}
+                          {req.employeeId?.firstName?.[0] || 'U'}
                           {req.employeeId?.lastName?.[0] || ''}
                         </div>
                         <div>
-                          <div style={{ fontWeight: 600 }}>{req.employeeId?.fullName}</div>
-                          <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>{req.employeeId?.email}</div>
+                          <div style={{ fontWeight: 600 }}>{req.employeeId?.fullName || req.employeeId?.firstName || 'Team Member'}</div>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>{req.employeeId?.email || req.employeeId?.designation}</div>
                         </div>
                       </div>
                     </td>
                     <td>
-                      <span className="badge badge-copper">{req.type}</span>
+                      <span className="badge badge-copper">{req.leaveType || req.type || 'Paid Time Off'}</span>
                     </td>
                     <td style={{ fontWeight: 600 }}>
-                      {req.startDate} {req.startDate !== req.endDate ? `→ ${req.endDate}` : ''}
+                      {req.startDate} {req.startDate !== req.endDate ? `→ ${req.endDate}` : ''} ({req.days || 1}d)
                     </td>
                     <td style={{ maxWidth: 260, color: 'var(--text-muted)' }}>
                       {req.reason || '—'}
                     </td>
                     <td>
-                      <span className={`badge badge-${req.status}`}>
-                        {req.status}
+                      <span className={`badge badge-${req.status === 'approved' ? 'success' : req.status === 'rejected' ? 'danger' : 'warning'}`}>
+                        {req.status?.toUpperCase() || 'PENDING'}
                       </span>
                     </td>
                     <td>
@@ -313,14 +349,14 @@ export default function TimeOff() {
                         <div style={{ display: 'flex', gap: '0.4rem' }}>
                           <button
                             className="btn btn-success btn-sm"
-                            onClick={() => handleApprove(req._id)}
+                            onClick={() => handleApprove(req._id || req.id)}
                             disabled={actionBusy}
                           >
                             <CheckCircle2 size={13} /> Approve
                           </button>
                           <button
                             className="btn btn-danger btn-sm"
-                            onClick={() => { setRejectingId(req._id); setRejectionReason(''); }}
+                            onClick={() => { setRejectingId(req._id || req.id); setRejectionReason(''); }}
                             disabled={actionBusy}
                           >
                             <XCircle size={13} /> Reject
@@ -328,7 +364,7 @@ export default function TimeOff() {
                         </div>
                       ) : (
                         <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>
-                          {req.status === 'approved' ? `Approved (${req.approvedBy?.fullName || 'HR'})` : 'Rejected'}
+                          {req.status === 'approved' ? '✓ Processed' : '✗ Declined'}
                         </span>
                       )}
                     </td>
@@ -343,19 +379,20 @@ export default function TimeOff() {
       {/* Request Time Off Modal */}
       {isRequestModalOpen && (
         <Modal
-          title="Submit Leave Request"
+          title="Submit Leave Application"
           isOpen={isRequestModalOpen}
           onClose={() => setIsRequestModalOpen(false)}
         >
           <form onSubmit={handleRequestSubmit}>
             <div className="field">
-              <label>Leave Type</label>
+              <label>Leave Category</label>
               <select
                 value={requestForm.type}
                 onChange={(e) => setRequestForm({ ...requestForm, type: e.target.value })}
               >
-                <option value="Paid Time Off">Paid Time Off (PTO) - {balance.ptoRemaining} days available</option>
-                <option value="Sick Time Off">Sick Time Off - {balance.sickRemaining} days available</option>
+                <option value="Paid Time Off">Paid Time Off (PTO) — {ptoRem} days available</option>
+                <option value="Sick Leave">Sick & Medical Leave — {sickRem} days available</option>
+                <option value="Casual Leave">Casual Leave — Included in Annual Balance</option>
               </select>
             </div>
 
@@ -382,12 +419,13 @@ export default function TimeOff() {
             </div>
 
             <div className="field">
-              <label>Reason / Notes</label>
+              <label>Reason / Absence Notes</label>
               <textarea
                 value={requestForm.reason}
                 onChange={(e) => setRequestForm({ ...requestForm, reason: e.target.value })}
-                placeholder="Explain the reason for time-off..."
+                placeholder="Describe reason for leave..."
                 rows={3}
+                required
               />
             </div>
 
@@ -404,7 +442,7 @@ export default function TimeOff() {
                 className="btn btn-primary"
                 disabled={requestBusy}
               >
-                {requestBusy ? <span className="spinner" /> : 'Submit Request'}
+                {requestBusy ? <span className="spinner" /> : 'Submit Leave Request'}
               </button>
             </div>
           </form>
@@ -414,16 +452,16 @@ export default function TimeOff() {
       {/* Reject Reason Modal */}
       {rejectingId && (
         <Modal
-          title="Reject Leave Request"
+          title="Decline Leave Application"
           isOpen={Boolean(rejectingId)}
           onClose={() => setRejectingId(null)}
         >
           <div className="field">
-            <label>Rejection Reason (Optional)</label>
+            <label>Reason for Declining (Optional)</label>
             <textarea
               value={rejectionReason}
               onChange={(e) => setRejectionReason(e.target.value)}
-              placeholder="e.g. Critical production release during this window..."
+              placeholder="e.g. Critical release milestone during this window..."
               rows={3}
             />
           </div>
@@ -442,7 +480,7 @@ export default function TimeOff() {
               onClick={handleReject}
               disabled={actionBusy}
             >
-              {actionBusy ? <span className="spinner" /> : 'Confirm Rejection'}
+              {actionBusy ? <span className="spinner" /> : 'Confirm Decline'}
             </button>
           </div>
         </Modal>

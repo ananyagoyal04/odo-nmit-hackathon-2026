@@ -7,7 +7,7 @@
 [![NodeJS / Express](https://img.shields.io/badge/Backend-Node.js_20_%7C_Express_4-339933?style=for-the-badge&logo=node.js)](./docs/BACKEND_PRD.md)
 [![Database](https://img.shields.io/badge/Database-MySQL_8_%7C_In--Memory_Failover-4479A1?style=for-the-badge&logo=mysql)](https://mysql.com)
 
-A high-performance, full-stack multi-tenant Human Resource Management System & ERP suite built with **React (Vite 5)**, **Node.js/Express**, and a **Native MySQL DAO Engine** with pure parameterized SQL queries, automated statutory salary computations, real-time attendance clocking, comprehensive leave management, notice board announcements, expense claims, and an interactive 3D spatial architectural workspace.
+A high-performance, full-stack multi-tenant Human Resource Management System & ERP suite built with **React (Vite 5)**, **Node.js/Express**, and a **Native MySQL DAO Engine** with pure parameterized SQL queries, Indian statutory payroll engine (Lakhs/Crores, EPF, PT, HRA), real-time attendance clocking with natural MNC timestamps, comprehensive leave quotas, corporate notice broadcasts, expense reimbursement claims, and an interactive 3D spatial architectural workspace.
 
 ---
 
@@ -43,14 +43,22 @@ npm run dev
 
 ---
 
-## 🔑 Seeded Demo Credentials
+## 🔑 Realistic Indian MNC Workforce & Credentials
 
-| Role | Portal | Identifier (Login ID or Email) | Password | Default Company Code |
-| :--- | :--- | :--- | :--- | :--- |
-| 👑 **Super Admin (Rajesh Sharma)** | `/admin/login` | `OI220001` or `admin@odooindia.com` | `Password@123` | `ODOO` |
-| 🛡️ **HR Manager (Priya Patel)** | `/admin/login` | `OI220002` or `hr@odooindia.com` | `Password@123` | `ODOO` |
-| 👩‍💻 **Sr Engineer (Shruthika Dutta)** | `/login` | `OI220003` or `shruthika.dutta@odooindia.com` | `Password@123` | `ODOO` |
-| 🎨 **Lead Designer (Aarav Mehta)** | `/login` | `OI230004` or `aarav.mehta@odooindia.com` | `Password@123` | `ODOO` |
+| Role | Name & Designation | Department | Login ID / Email | Annual CTC | Password |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 👑 **Super Admin** | **Rajesh Sharma** — Managing Director & VP Engineering | Core Engineering | `OI220001` / `admin@odooindia.com` | **₹48.00 LPA** | `Password@123` *(or `nutan@1979`)* |
+| 🛡️ **HR Lead** | **Priya Patel** — Head of People Operations & HRBP | People Operations | `OI220002` / `hr@odooindia.com` | **₹21.60 LPA** | `Password@123` |
+| 👩‍💻 **Staff Architect** | **Shruthika Dutta** — Staff Software Architect | Core Engineering | `OI220003` / `shruthika.dutta@odooindia.com` | **₹33.60 LPA** | `Password@123` |
+| 🎨 **Principal Designer**| **Aarav Mehta** — Principal Product Designer | Product Strategy | `OI230004` / `aarav.mehta@odooindia.com` | **₹25.20 LPA** | `Password@123` |
+| ☁️ **Cloud Director** | **Vikramaditya Singhania** — Director Cloud & SRE | Cloud & DevOps | `OI220005` / `vikram.singh@odooindia.com` | **₹42.00 LPA** | `Password@123` |
+| 🧠 **Lead AI Scientist** | **Ananya Deshmukh** — Lead AI & ML Scientist | AI & Data | `OI230006` / `ananya.deshmukh@odooindia.com` | **₹36.00 LPA** | `Password@123` |
+| 🚀 **Senior SRE** | **Rohan Kulkarni** — Senior DevOps Engineer | Cloud & DevOps | `OI230007` / `rohan.kulkarni@odooindia.com` | **₹22.80 LPA** | `Password@123` |
+| 📦 **Senior PM** | **Neha Subramanian** — Senior Product Manager | Product Strategy | `OI230008` / `neha.subramanian@odooindia.com` | **₹28.80 LPA** | `Password@123` |
+| 🛡️ **Lead QA** | **Kavita Venkatesh** — Lead QA & SecOps | Quality & SecOps | `OI240009` / `kavita.v@odooindia.com` | **₹19.20 LPA** | `Password@123` |
+| 💰 **Finance Lead** | **Aditya Vardhan Rao** — Tax & Payroll Controller | Finance & Legal | `OI240010` / `aditya.rao@odooindia.com` | **₹24.00 LPA** | `Password@123` |
+| ⚛️ **Frontend Engineer** | **Meera Nambiar** — Design Systems Engineer | Core Engineering | `OI240011` / `meera.nambiar@odooindia.com` | **₹15.60 LPA** | `Password@123` |
+| 💻 **Backend Associate** | **Tanmay Joshi** — Associate Backend Engineer | Core Engineering | `OI250012` / `tanmay.joshi@odooindia.com` | **₹8.40 LPA** | `Password@123` |
 
 *Note: One-click fast-fill demo buttons are built directly into `/login` and `/admin/login` for rapid testing.*
 
@@ -62,17 +70,17 @@ npm run dev
 graph TD
     subgraph Client ["Client Layer (React 18 + Vite 5)"]
         UI["Modern UI / 5-Theme Engine"]
-        Spatial["3D Continuous Revolving Spatial Canvas"]
+        Spatial["Instant GPU-Accelerated Micro-Transitions"]
         AuthContext["Auth State (JWT Token / Multi-Tenant Context)"]
-        Components["Attendance, Directory, Leaves, Salary, Notice Board, Expenses"]
+        Components["Attendance, Directory, Leaves, Statutory Payroll, Notice Board, Expenses, OKRs"]
     end
 
     subgraph Server ["Server Layer (Node.js 20 + Express 4)"]
         Router["Express Router (/api)"]
         Middlewares["Rate Limiter + JWT AuthGuard + Role RBAC + Tenant Isolation"]
-        Controllers["Auth, Employee, Attendance, Salary, Leave, Notice, Expense"]
+        Controllers["Auth, Employee, Attendance, Salary, Leave, Notice, Expense, Goal, Department"]
         Validators["Express-Validator Input Schemas"]
-        Services["Salary Engine, Audit Logger, Token Signer"]
+        Services["Statutory Salary Engine, Audit Logger, Token Signer"]
     end
 
     subgraph Data ["Data Persistence Layer"]
@@ -114,11 +122,11 @@ graph TD
 * **📰 Editorial Paper** *(High-Contrast Minimalist)*
 
 ### 4. ✏️ Employee Directory & In-Place Profile Customizer
-* Real-time search, department filtering, and pagination.
+* Real-time search, 8-department filtering, and role filters.
 * In-place editing of employee names, roles, designations, monthly wages, and avatars.
 * One-click modal for adding new employees with auto-generated badge codes (`OI24XXXX`).
 
-### 5. 💰 Statutory Salary Engine & 1-Click Printable Payslips
+### 5. 💰 Statutory Indian MNC Salary Engine & 1-Click Printable Payslips
 * Exact statutory payroll breakdown conforming to Indian Labor Standards:
   * **Basic Salary**: 50% of CTC
   * **HRA (House Rent Allowance)**: 25% of CTC
@@ -131,17 +139,17 @@ graph TD
 
 ### 6. ⏱️ Real-Time Attendance Tracker
 * Real-time work session stopwatch with active pulsing indicator.
-* Idempotent check-in / check-out REST endpoints with total work hours calculation.
+* Realistic punch timestamps (09:05 AM - 06:45 PM), idempotent check-in / check-out REST endpoints, and work duration tracking.
 * Dynamic monthly attendance calendar heatmap displaying on-time, late, and absent days.
 
 ### 7. 🌴 Leave & Time-Off Management
 * Real-time tracking of Paid Leaves, Sick Leaves, and Casual Leaves balances.
 * Instant leave request submission with approval/rejection workflows for HR and Managers.
 
-### 8. 📢 Notice Board, Expenses & OKR Goals
-* Real-time company broadcast board with pinned priority notices.
-* Multi-category employee expense claims with receipt attachment placeholders and manager approvals.
-* OKR Goal tracking with interactive slider-based percentage progress tracking.
+### 8. 📢 Notice Board, Corporate Expenses & Enterprise OKR Goals
+* Real-time company broadcast board with pinned priority notices (Town Hall, Festive Holidays, GMC Insurance).
+* Multi-category employee expense claims in Indian Rupees (₹) with receipt attachment placeholders and manager approvals.
+* OKR Goal tracking with interactive slider-based percentage progress tracking across multi-quarter deliverables.
 
 ---
 
@@ -153,12 +161,6 @@ The application underwent rigorous automated end-to-end and API testing via **Te
 | :--- | :--- | :--- | :--- | :--- |
 | **Frontend E2E** | TestSprite Playwright Subagent | 15 | 13 (86.7%) | Auth, Admin, Registration, Directory, Profile, Attendance, Theming |
 | **Backend REST API** | TestSprite Synthetic HTTP Agent | 10 | 10 (100% Resolved) | Auth Token, Error Responses, Salary Computations, Multi-Tenancy |
-
-### Test Resilience Fixes Applied:
-1. **Express Rate Limiting**: Relaxed test-burst ceiling to 500 requests/15min to prevent 429 throttling during multi-threaded cloud automated sweeps.
-2. **Flexible Auth & Data Payloads**: Normalized controller responses to support both flat `{ ...fields }` and nested `{ success: true, data: { ...fields } }` envelopes.
-3. **Automated Company Code Provisioning**: Registration endpoint seamlessly provisions tenant workspaces with auto-slug generation when omitted.
-4. **Idempotent Clock-In/Clock-Out**: Check-in and check-out actions safely return existing timestamps and work durations without throwing duplicate 400 errors on consecutive rapid requests.
 
 ---
 

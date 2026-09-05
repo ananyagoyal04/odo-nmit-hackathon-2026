@@ -83,8 +83,8 @@ export default function EmployeeProfile() {
   const isAdmin = currentUser?.role === 'SUPER_ADMIN';
   const isHR = currentUser?.role === 'HR';
   const canEditGeneral = isSelf || isAdmin || isHR;
-  const canViewSalary = isSelf || isAdmin;
-  const canEditSalary = isAdmin;
+  const canViewSalary = isSelf || isAdmin || isHR;
+  const canEditSalary = isAdmin || isHR;
 
   const fetchProfile = async () => {
     try {

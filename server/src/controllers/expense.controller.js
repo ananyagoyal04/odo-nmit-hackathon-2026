@@ -25,7 +25,7 @@ const getExpenses = asyncHandler(async (req, res) => {
  * POST /api/expenses
  */
 const createExpense = asyncHandler(async (req, res) => {
-  const { title, category = 'Other', amount, expenseDate, description } = req.body;
+  const { title, category = 'Other', amount, expenseDate, description, receiptUrl } = req.body;
   if (!title || !amount) {
     throw ApiError.badRequest('Title and amount are required.');
   }
@@ -35,9 +35,10 @@ const createExpense = asyncHandler(async (req, res) => {
     employeeId: req.user._id,
     title,
     category,
-    amount,
-    expenseDate,
-    description
+    amount: Number(amount),
+    expenseDate: expenseDate || new Date().toISOString().split('T')[0],
+    description: description || '',
+    receiptUrl: receiptUrl || ''
   });
 
   res.status(201).json({
@@ -48,23 +49,27 @@ const createExpense = asyncHandler(async (req, res) => {
 });
 
 /**
- * PUT /api/expenses/:id/review
+ * PATCH /api/expenses/:id/action or PUT /api/expenses/:id/review
  */
 const reviewExpense = asyncHandler(async (req, res) => {
-  const { status, rejectionReason } = req.body;
-  if (!['approved', 'rejected'].includes(status)) {
-    throw ApiError.badRequest('Status must be approved or rejected.');
+  let targetStatus = req.body.status || req.body.action;
+
+  if (targetStatus === 'approve') targetStatus = 'approved';
+  if (targetStatus === 'reject') targetStatus = 'rejected';
+
+  if (!['approved', 'rejected'].includes(targetStatus)) {
+    throw ApiError.badRequest('Status or action must be approved or rejected.');
   }
 
   const updated = await db.reviewExpense(req.params.id, req.companyId, {
-    status,
+    status: targetStatus,
     approvedBy: req.user._id,
-    rejectionReason
+    rejectionReason: req.body.rejectionReason || ''
   });
 
   res.status(200).json({
     success: true,
-    message: `Expense claim ${status} successfully.`,
+    message: `Expense claim has been ${targetStatus}.`,
     expense: updated
   });
 });

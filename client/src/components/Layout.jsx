@@ -159,7 +159,7 @@ export default function Layout() {
           <div className="brandmark" style={{ marginBottom: 0, cursor: 'pointer' }} onClick={() => navigate('/dashboard')}>
             <div className="logo-chip">{company?.companyCode || 'OI'}</div>
             <div className="name" style={{ fontSize: '1.05rem' }}>
-              {company?.name || 'Odoo India'} <span>· Workforce</span>
+              {company?.name || 'Odoo Technologies India'} <span>· Workforce</span>
             </div>
           </div>
 
@@ -170,11 +170,9 @@ export default function Layout() {
             <NavLink to="/employees" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
               <Users size={16} /> Employees
             </NavLink>
-            {['SUPER_ADMIN', 'HR'].includes(user?.role) && (
-              <NavLink to="/payroll" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-                <DollarSign size={16} /> Payroll
-              </NavLink>
-            )}
+            <NavLink to="/payroll" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+              <DollarSign size={16} /> Payroll
+            </NavLink>
             <NavLink to="/attendance" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
               <Clock size={16} /> Attendance
             </NavLink>
